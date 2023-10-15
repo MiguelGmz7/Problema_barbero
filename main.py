@@ -4,14 +4,15 @@ import queue
 
 def barbero(barbero_disponible, cola_clientes):
     while True:
-        if not cola_clientes.empty():
+        if not cola_clientes.empty(): #si la cola_clientes no esta vacia: 
             cliente = cola_clientes.get()
             print(f'El barbero está atendiendo al cliente {cliente}')
-            time.sleep(2)  # El barbero atiende al cliente durante 2 segundos
+            time.sleep(5)  # El barbero atiende al cliente durante 2 segundos
             print(f'El cliente {cliente} ha sido atendido')
             cola_clientes.task_done()
-        else:
+        else: # Si esta vacia (pasa esto primero)
             print('El barbero está durmiendo...')
+            time.sleep(3)
             barbero_disponible.set()
             barbero_disponible.wait()
 
@@ -26,14 +27,19 @@ def cliente(cliente_id, cola_clientes, barbero_disponible):
         print(f'La barbería está llena. Cliente {cliente_id} se va.')
 
 if __name__ == '__main__':
-    cola_clientes = queue.Queue()
-    barbero_disponible = threading.Event()
+    cola_clientes = queue.Queue() # Cola (FIFO)
+    barbero_disponible = threading.Event() #Creamos un semaforo(False), Set = True, Clear = False, wait = empezera a ser true o false
 
-    barbero_thread = threading.Thread(target=barbero, args=(barbero_disponible, cola_clientes))
+
+    barbero_thread = threading.Thread(target=barbero,daemon=True, args=(barbero_disponible, cola_clientes)) #empieza la funcion como un hilo
+    # Empeazamos un sub-proceso (hilo)
     barbero_thread.start()
 
-    clientes = [1, 2, 3]  # Número de clientes que llegan
+    clientes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Número de clientes que llegan
     for cliente_id in clientes:
-        time.sleep(1)  # Intervalo de llegada de clientes
-        cliente_thread = threading.Thread(target=cliente, args=(cliente_id, cola_clientes, barbero_disponible))
+        time.sleep(2)  # Intervalo de llegada de clientes
+        cliente_thread = threading.Thread(target=cliente,daemon=True, args=(cliente_id, cola_clientes, barbero_disponible))
+        #empezamos un sub-proceso
         cliente_thread.start()
+    
+    input("Terminar el proceso")
