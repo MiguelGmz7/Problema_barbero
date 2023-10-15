@@ -2,6 +2,8 @@ import threading
 import time
 import queue
 
+# Codigo correcto
+
 def barbero(barbero_disponible, cola_clientes):
     while True:
         if not cola_clientes.empty(): #si la cola_clientes no esta vacia: 
