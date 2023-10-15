@@ -32,7 +32,7 @@ if __name__ == '__main__':
     barbero_thread = threading.Thread(target=barbero, args=(barbero_disponible, cola_clientes))
     barbero_thread.start()
 
-    clientes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # Número de clientes que llegan
+    clientes = [1, 2, 3]  # Número de clientes que llegan
     for cliente_id in clientes:
         time.sleep(1)  # Intervalo de llegada de clientes
         cliente_thread = threading.Thread(target=cliente, args=(cliente_id, cola_clientes, barbero_disponible))
