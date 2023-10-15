@@ -2,6 +2,7 @@ import threading
 import time
 import queue
 import os
+import random
 
 # Codigo correcto
 
@@ -10,8 +11,9 @@ def barbero(barbero_disponible, cola_clientes):
         if not cola_clientes.empty(): #si la cola_clientes no esta vacia: 
             cliente = cola_clientes.get()
             print(f'El barbero está atendiendo al cliente {cliente}')
-            time.sleep(5)  # El barbero atiende al cliente durante 2 segundos
-            print(f'El cliente {cliente} ha sido atendido')
+            tiempo = random.randint(1,9)
+            time.sleep(tiempo)  # El barbero atiende al cliente durante 2 segundos
+            print(f'El cliente {cliente} ha sido atendido, en {tiempo} seg')
             cola_clientes.task_done()
         else: # Si esta vacia (pasa esto primero)
             print('El barbero está durmiendo...')
@@ -44,7 +46,7 @@ if __name__ == '__main__':
     barbero_thread.start()
 
     for cliente_id in clientes:
-        time.sleep(2)  # Intervalo de llegada de clientes
+        time.sleep(random.randint(1,9))  # Intervalo de llegada de clientes
         cliente_thread = threading.Thread(target=cliente,daemon=True, args=(cliente_id, cola_clientes, barbero_disponible))
         #empezamos un sub-proceso
         cliente_thread.start()
